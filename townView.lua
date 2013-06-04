@@ -51,11 +51,30 @@ function scene:createScene( event )
 			-- create grid cells
 			adjX = (cellWidth/2)*(col-row)
 			adjY = (cellHeight/2)*(col+row)
-			local cell = display.newLine(gridOriginX+adjX, gridOriginY+adjY, 
-										gridOriginX+(cellWidth/2)+adjX, gridOriginY+(cellHeight/2)+adjY)
-			cell:append(gridOriginX+adjX, gridOriginY+cellHeight+adjY)
-			cell:append(gridOriginX-(cellWidth/2)+adjX, gridOriginY+(cellHeight/2)+adjY)
-			cell:append(gridOriginX+adjX, gridOriginY+adjY)
+			local cell = display.newLine(gridOriginX+adjX, gridOriginY+adjY, -- top coord
+										gridOriginX+(cellWidth/2)+adjX, gridOriginY+(cellHeight/2)+adjY) -- right coord
+			cell:append(gridOriginX+adjX, gridOriginY+cellHeight+adjY) -- bottom coord
+			cell:append(gridOriginX-(cellWidth/2)+adjX, gridOriginY+(cellHeight/2)+adjY) -- left coord
+			cell:append(gridOriginX+adjX, gridOriginY+adjY) -- back to top coord
+			
+			--debug put colored dots in middle of each cell corresponding to the building on that cell
+			local dot = display.newRect(0, 0, 3, 3)
+			dot:setReferencePoint( display.CenterReferencePoint )
+			dot.x = gridOriginX+adjX
+			dot.y = gridOriginY+adjY + (cellHeight * 0.5)
+			--get cell data
+			query="SELECT * FROM cellsfor"..storyboard.townData["id"].." WHERE row="..(row+1).." AND column="..(col+1)
+			for cellData in storyboard.db:nrows(query) do
+				if cellData.building ~= 1 then -- cell has a building on it
+					for buildingData in storyboard.db:nrows("SELECT * FROM building_defs WHERE id="..cellData.building) do -- get building colors
+						dot:setFillColor(buildingData.colorR,buildingData.colorG,buildingData.colorB)
+						cell:setColor(buildingData.colorR,buildingData.colorG,buildingData.colorB)
+					end
+					group:insert(cell)
+				else
+					group:insert(1,cell) -- inserting at index 1 puts this object at the bottom
+				end
+			end
 			
 			--[[--figuring out how to draw the cells
 			
@@ -135,10 +154,13 @@ function scene:createScene( event )
 			
 			--make the cells pretty
 			cell.width = 2;
-			cell:setColor(255,0,0)
-			group:insert( cell )
+			
+			group:insert( dot )
 		end
 	end
+	
+
+	
 
 	-- create Back button
 	local backBtn = widget.newButton{
