@@ -24,4 +24,4 @@ storyboard.townCells = {}
 
 -- load menu screen
 --storyboard.gotoScene( "mainMenu" )
-storyboard.gotoScene( "plannerView" )
+storyboard.gotoScene( "mainMenu" )

@@ -21,6 +21,14 @@ end
 
 -- 'onRelease' event listeners for buttons
 local function onBackBtnRelease()
+	if buildBorder then
+		buildBorder:removeSelf()
+		buildBorder = nil
+	end
+	if buildMessage then
+		buildMessage:removeSelf()
+		buildMessage = nil
+	end
 	storyboard.gotoScene( "townMenu", "fade", 500 )
 	return true	-- indicates successful touch
 end
@@ -202,6 +210,14 @@ function scene:destroyScene( event )
 	if backBtn then
 		backBtn:removeSelf()	-- widgets must be manually removed
 		backBtn = nil
+	end
+	if buildBorder then
+		buildBorder:removeSelf()
+		buildBorder = nil
+	end
+	if buildMessage then
+		buildMessage:removeSelf()
+		buildMessage = nil
 	end
 end
 

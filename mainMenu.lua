@@ -20,7 +20,7 @@ local settingsBtn
 
 -- 'onRelease' event listeners for buttons
 local function onNewTownBtnRelease()
-	storyboard.gotoScene( "townMenu", "fade", 500 )
+	storyboard.gotoScene( "newTown", "fade", 500 )
 	return true	-- indicates successful touch
 end
 local function onLoadTownBtnRelease()
