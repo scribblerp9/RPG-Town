@@ -10,12 +10,14 @@ local scene = storyboard.newScene()
 -- include Corona's "widget" library
 local widget = require "widget"
 
--- debug (a way of skipping the load screen, remove if you want to test different towns!)
+--[[
+-- debug (a way of skipping the load screen, comment out if you want to test different towns!)
 for row in storyboard.db:nrows("SELECT * FROM towns WHERE id=2") do
 	storyboard.townData["id"] = row.id
 	storyboard.townData["name"] = row.name
 	storyboard.townData["size"] = row.size
 end
+--]]
 
 --------------------------------------------
 

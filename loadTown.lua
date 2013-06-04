@@ -71,7 +71,7 @@ function scene:createScene( event )
 		}
 		townBtn:setReferencePoint( display.CenterReferencePoint )
 		townBtn.x = display.contentWidth*0.5
-		townBtn.y = display.contentHeight - 250 + (60*numTowns)
+		townBtn.y = display.contentHeight - 320 + (60*numTowns)
 		numTowns = numTowns+1
 		group:insert( townBtn )
 	end
