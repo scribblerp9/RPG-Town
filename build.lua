@@ -20,12 +20,6 @@ end
 
 --------------------------------------------
 
--- Listen for tableView events
-local function tableViewListener( event )
-    local phase = event.phase
-    print( event.phase )
-end
-
 -- Handle row rendering
 local function onRowRender( event )
     local phase = event.phase
@@ -51,7 +45,7 @@ end
 -- Handle touches on the row
 local function onRowTouch( event )
     local phase = event.phase
-print(phase)
+	print(phase)
 	local row = event.target
     if phase == "release" then
         -- Update database to place building in the touched cell
@@ -101,7 +95,8 @@ function scene:createScene( event )
 		maskFile = "Images/tableMask.png",
 	    listener = buildingTblListener,
 	    onRowRender = onRowRender,
-	    onRowTouch = onRowTouch
+	    onRowTouch = onRowTouch;
+		friction = 0.1 -- trying to fix the problem with touching the rows
 	}
 
 	-- Create enough rows for all building defs
