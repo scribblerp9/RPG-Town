@@ -51,29 +51,38 @@ function scene:createScene( event )
 			-- create grid cells
 			adjX = (cellWidth/2)*(col-row)
 			adjY = (cellHeight/2)*(col+row)
+--[[
 			local cell = display.newLine(gridOriginX+adjX, gridOriginY+adjY, -- top coord
 										gridOriginX+(cellWidth/2)+adjX, gridOriginY+(cellHeight/2)+adjY) -- right coord
 			cell:append(gridOriginX+adjX, gridOriginY+cellHeight+adjY) -- bottom coord
 			cell:append(gridOriginX-(cellWidth/2)+adjX, gridOriginY+(cellHeight/2)+adjY) -- left coord
 			cell:append(gridOriginX+adjX, gridOriginY+adjY) -- back to top coord
+--]]
 			
 			--debug put colored dots in middle of each cell corresponding to the building on that cell
+--[[
 			local dot = display.newRect(0, 0, 3, 3)
 			dot:setReferencePoint( display.CenterReferencePoint )
 			dot.x = gridOriginX+adjX
 			dot.y = gridOriginY+adjY + (cellHeight * 0.5)
+--]]
+			--get centre point of cell
+			local centreX = gridOriginX+adjX
+			local centreY = gridOriginY+adjY + (cellHeight * 0.5)
 			--get cell data
 			query="SELECT * FROM cellsfor"..storyboard.townData["id"].." WHERE row="..(row+1).." AND column="..(col+1)
 			for cellData in storyboard.db:nrows(query) do
-				if cellData.building ~= 1 then -- cell has a building on it
-					for buildingData in storyboard.db:nrows("SELECT * FROM building_defs WHERE id="..cellData.building) do -- get building colors
-						dot:setFillColor(buildingData.colorR,buildingData.colorG,buildingData.colorB)
-						cell:setColor(buildingData.colorR,buildingData.colorG,buildingData.colorB)
-					end
-					group:insert(cell)
-				else
-					group:insert(1,cell) -- inserting at index 1 puts this object at the bottom
+				for buildingData in storyboard.db:nrows("SELECT * FROM building_defs WHERE id="..cellData.building) do -- get building colors
+					--dot:setFillColor(buildingData.colorR,buildingData.colorG,buildingData.colorB)
+					--cell:setColor(buildingData.colorR,buildingData.colorG,buildingData.colorB)
+					local image = display.newImage("Images/"..buildingData.image)
+					image:setReferencePoint( display.BottomCenterReferencePoint )
+					image.x = centreX
+					image.y = centreY + cellHeight/2
+					group:insert(image)
+					print("cell ("..(row+1)..","..(col+1)..") is "..buildingData.image)
 				end
+				--group:insert(1,cell)
 			end
 			
 			--[[--figuring out how to draw the cells
@@ -153,10 +162,8 @@ function scene:createScene( event )
 			--]]
 			
 			--make the cells pretty
-			cell.width = 2;
-			
-			group:insert( dot )
-		end
+			--cell.width = 2;
+			end
 	end
 	
 
