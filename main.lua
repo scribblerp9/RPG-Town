@@ -24,5 +24,5 @@ storyboard.townData = {}
 storyboard.townCells = {}
 
 -- load menu screen
-storyboard.gotoScene( "mainMenu" )
---storyboard.gotoScene( "loadTown" )
+--storyboard.gotoScene( "mainMenu" )
+storyboard.gotoScene( "loadTown" )

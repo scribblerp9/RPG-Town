@@ -17,6 +17,14 @@ local function onBackBtnRelease()
 	storyboard.gotoScene( "plannerView", "fade", 500 )
 	return true	-- indicates successful touch
 end
+local function onBuildBtnRelease( event )
+	local button = event.target
+    -- Update database to place building in the touched cell
+	storyboard.db:exec("UPDATE cellsfor"..storyboard.townData["id"].." SET building="..button.id.." WHERE id="..cellTapped.id)
+	print("Built a "..button.id)
+	-- return to the planner view
+	storyboard.gotoScene( "plannerView", "fade", 500 )
+end
 
 --------------------------------------------
 
@@ -32,6 +40,21 @@ local function onRowRender( event )
     rowTitle.x = 10--row.x - (row.contentWidth * 0.5)+ ( rowTitle.contentWidth * 0.5 )
     rowTitle.y = row.contentHeight * 0.5
     rowTitle:setTextColor( 0, 0, 0 )
+
+	-- create Build button
+	local buildBtn = widget.newButton{
+		id = row.id,
+		label="Build",
+		labelColor = { default={255}, over={128} },
+		defaultFile="button.png",
+		overFile="button-over.png",
+		width=60, height=row.contentHeight-10,
+		onRelease = onBuildBtnRelease	-- event listener function
+	}
+	row:insert(buildBtn)
+	buildBtn:setReferencePoint( display.CenterReferencePoint )
+	buildBtn.x = display.contentWidth - buildBtn.contentWidth - 10
+	buildBtn.y = row.contentHeight * 0.5
 end
 
 --[[
@@ -43,6 +66,7 @@ end
 --]]
 
 -- Handle touches on the row
+--[[
 local function onRowTouch( event )
     local phase = event.phase
 	print(phase)
@@ -54,6 +78,7 @@ local function onRowTouch( event )
 		storyboard.gotoScene( "plannerView", "fade", 500 )
     end
 end
+--]]
 
 --------------------------------------------
 
@@ -95,7 +120,7 @@ function scene:createScene( event )
 		maskFile = "Images/tableMask.png",
 	    listener = buildingTblListener,
 	    onRowRender = onRowRender,
-	    onRowTouch = onRowTouch;
+	    --onRowTouch = onRowTouch;
 		friction = 0.1 -- trying to fix the problem with touching the rows
 	}
 
@@ -103,7 +128,7 @@ function scene:createScene( event )
 	for def in storyboard.db:nrows("SELECT * FROM building_defs") do
 		local id = def.id
 		local isCategory = false
-	    local rowHeight = 40
+	    local rowHeight = 45
 	    local rowColor = 
 	    { 
 	        default = { 255, 255, 255 },

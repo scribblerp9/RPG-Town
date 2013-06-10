@@ -25,27 +25,32 @@ end
 function scene:createScene( event )
 	local group = self.view
 	
+	--Useful variables
+	halfScreenW = screenW * 0.5
+	halfScreenH = screenH * 0.5
+	
 	-- create/position title
 	local title = display.newText("Town View", 264, 42, native.systemFont, 40)
 	title:setReferencePoint( display.CenterReferencePoint )
 	title.x = display.contentWidth * 0.5
 	title.y = 50
-	
-	halfScreenW = screenW * 0.5
-	halfScreenH = screenH * 0.5
+
 --[[
 	-- display a dot in the centre of the screen for debugging purposes
 	centre = display.newRect(0,0,5,5)
 	centre.x = halfScreenW
 	centre.y = halfScreenH
 --]]
-
+	
+	-- Create map area
+	
+	
+	-- Display buildings
 	numRowsAndCols = storyboard.townData["size"]
 	cellWidth = 40
 	cellHeight = cellWidth/2
 	gridOriginX = halfScreenW --All cell X-coordinates based on this
 	gridOriginY = halfScreenH - ((numRowsAndCols / 2)*cellHeight) --All cell Y-coordinates based on this
-	
 	for row=0, numRowsAndCols-1 do
 		for col=0, numRowsAndCols-1 do
 			-- create grid cells
@@ -58,9 +63,8 @@ function scene:createScene( event )
 			cell:append(gridOriginX-(cellWidth/2)+adjX, gridOriginY+(cellHeight/2)+adjY) -- left coord
 			cell:append(gridOriginX+adjX, gridOriginY+adjY) -- back to top coord
 --]]
-			
-			--debug put colored dots in middle of each cell corresponding to the building on that cell
 --[[
+			--debug put colored dots in middle of each cell corresponding to the building on that cell
 			local dot = display.newRect(0, 0, 3, 3)
 			dot:setReferencePoint( display.CenterReferencePoint )
 			dot.x = gridOriginX+adjX
@@ -165,9 +169,6 @@ function scene:createScene( event )
 			--cell.width = 2;
 			end
 	end
-	
-
-	
 
 	-- create Back button
 	local backBtn = widget.newButton{
